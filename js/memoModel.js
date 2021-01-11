@@ -67,9 +67,10 @@ export default class MemoModel {
    하나의 메모를 가져오는 function
    findOneMemo function
    */
-  findOneMemo = (id) => new Promise((reolve, reject)=>{
+  findOneMemo = (id) => new Promise((resolve, reject)=>{
     this.storageMemo = this.parsingMemos();
-    resolve(this.storageMemo.find(memo=>memo.id === id))
+    resolve(this.storageMemo.find((memo)=>memo.id === id))
+    
   })
 
    /*
@@ -90,14 +91,16 @@ export default class MemoModel {
    */
     updateMemo = (memo) =>new Promise((resolve,reject)=>{
         this.storageMemo = this.parsingMemos();
-        const index = this.findIndexMemo(memo.id); // 리턴한 id
-        const updateMemos = [
-            ...this.storageMemo.slice(0,index),
-            memo,
-            ...this.storageMemo.slice(index+1)
-        ]
-        console.log(updateMemos ,'updateMemos ')
+        const index = this.findIndexMemo(memo.id); // 리턴한 id(현재 작성 한 메모)
+        
+        this.storageMemo[index] = memo;
+        //localStorage.memos = JSON.stringify( this.storageMemo);
+       localStorage.setItem("memos", JSON.stringify(this.storageMemo));
+		
+		resolve();
     })
+
+    
 
     
 }
